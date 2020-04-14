@@ -10,6 +10,9 @@ logger = logging.getLogger(__name__)
 todo_body_commit = re.compile("based on a `todo` comment in ([0-9\w]+)")
 todo_addition = re.compile("\+.*(@todo|TODO)(.*)")
 todo_removal = re.compile("\-.*(@todo|TODO)(.*)")
+re_github_remotes = re.compile(
+    "(\w+).*github.com[:/]([\w\-_0-9]+)/([\w\-_0-9]+).git \(fetch\)"
+)
 
 
 def get_todo_created_issues(github_token, issue_source_repo):
@@ -52,4 +55,14 @@ def get_todos_pending_removal(repo_dir):
         .decode()
         .split("\n")
         if todo_removal.match(line)
+    ]
+
+
+def get_configured_remotes(repo_dir):
+    return [
+        dict(zip(["name", "user", "repo"], re_github_remotes.match(line).groups()))
+        for line in subprocess.check_output(["git", "remote", "-v"], cwd=repo_dir)
+        .decode()
+        .split("\n")
+        if re_github_remotes.match(line)
     ]

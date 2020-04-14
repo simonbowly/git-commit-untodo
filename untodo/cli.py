@@ -1,4 +1,5 @@
 import json
+import operator
 import os
 import pathlib
 import subprocess
@@ -10,7 +11,11 @@ import appdirs
 import click
 import prompt_toolkit
 
-from .git import get_todo_created_issues, get_todos_pending_removal
+from .git import (
+    get_todo_created_issues,
+    get_todos_pending_removal,
+    get_configured_remotes,
+)
 
 
 def config_dir():
@@ -81,16 +86,16 @@ def cli_configure():
         get_github_token()
     except LookupError:
         cli_update_token()
-    try:
-        remote = get_issue_source_repo(repo_dir=".")
-    except LookupError:
-        remote = None
-    # @todo this should instead offer a list of remotes to pick from
-    new_remote = prompt_toolkit.prompt(
-        f"Set github user/repo to search for issues [{remote}]: "
-    )
-    if new_remote:
-        set_issue_source_repo(repo_dir=".", remote=new_remote)
+    options = {i + 1: rmt for i, rmt in enumerate(get_configured_remotes(repo_dir="."))}
+    click.echo("Choose the GitHub remote to retrieve issues from:")
+    for i, rmt, in sorted(options.items()):
+        click.echo(f"    {i} - {rmt['name']} = {rmt['user']}/{rmt['repo']}")
+    choice = prompt_toolkit.prompt("Choice [1]? ")
+    choice = 1 if not choice else choice
+    remote = options[int(choice)]
+    remote = f"{remote['user']}/{remote['repo']}"
+    set_issue_source_repo(repo_dir=".", remote=remote)
+    click.echo(f"Issues will be retrieved from github:{remote}")
 
 
 @click.command()
