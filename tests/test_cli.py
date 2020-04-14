@@ -1,6 +1,6 @@
 """ Just an import test for checking installation requirements. """
 
-from untodo.cli import cli
+from git_commit_untodo.cli import cli
 
 
 def test_cli():

@@ -9,7 +9,7 @@ here = pathlib.Path(__file__).parent
 long_description = here.joinpath("README.md").read_text()
 
 setup(
-    name="untodo",
+    name="git-commit-untodo",
     version="0.1.0",
     description="Automate commit messages to close issues created by the GitHub todo bot",
     long_description=long_description,
@@ -19,7 +19,7 @@ setup(
     python_requires=">=3.6",
     packages=find_packages(exclude=["tests", "*.tests", "*.tests.*", "tests.*"]),
     install_requires=["appdirs", "click", "prompt-toolkit", "pygithub"],
-    entry_points={"console_scripts": ["git-commit-untodo=untodo.cli:cli"]},
+    entry_points={"console_scripts": ["git-commit-untodo=git_commit_untodo.cli:cli"]},
     include_package_data=True,
     classifiers=[
         "Programming Language :: Python",

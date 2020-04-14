@@ -1,5 +1,4 @@
 import json
-import operator
 import os
 import pathlib
 import subprocess
@@ -35,7 +34,7 @@ def get_github_token():
             return infile.read().strip()
     except FileNotFoundError:
         raise LookupError(
-            "Untodo is not configured yet. Run `git commit-untodo --configure`."
+            "Not configured yet. Run `git commit-untodo --configure`."
         )
 
 
@@ -62,7 +61,7 @@ def get_issue_source_repo(repo_dir):
         remote = None
     if remote is None:
         raise LookupError(
-            "Untodo is not configured for this repository. Run `git commit-untodo --configure`."
+            "Not configured for this repository yet. Run `git commit-untodo --configure`."
         )
     return remote
 
