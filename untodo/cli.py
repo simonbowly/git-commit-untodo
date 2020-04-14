@@ -1,6 +1,8 @@
 import json
 import os
 import pathlib
+import subprocess
+import tempfile
 import textwrap
 import webbrowser
 
@@ -87,8 +89,8 @@ def configure(update_token):
 
 
 @cli.command()
-@click.argument("outfile", type=click.File("w"))
-def commit(outfile):
+@click.option("--dry-run/--no-dry-run", default=False)
+def commit(dry_run):
     """Prepare a commit message including 'closes' tags for issues that should
     be closed as a result of todo removals."""
     try:
@@ -101,13 +103,20 @@ def commit(outfile):
         issue["title"]: issue
         for issue in get_todo_created_issues(github_token, issue_source_repo)
     }
+    draft_message = ""
     for pending in get_todos_pending_removal(repo_dir="."):
         issue = open_todo_issues.get(pending)
         if issue is not None:
-            outfile.write(
-                textwrap.dedent(
-                    f"""
-                    Closes #{issue['number']} - {pending}
-                    """
-                )
+            draft_message += textwrap.dedent(
+                f"""
+                Closes #{issue['number']} TODO - {pending}
+                """
             )
+    if dry_run:
+        click.echo(draft_message)
+    else:
+        with tempfile.TemporaryDirectory() as tempdir:
+            template = pathlib.Path(tempdir).joinpath("draft-msg")
+            with template.open("w") as outfile:
+                outfile.write(draft_message)
+            subprocess.run(["git", "commit", "--template", template])
