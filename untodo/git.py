@@ -1,13 +1,8 @@
-import re
-import textwrap
-import webbrowser
-
-import click
-import github
-
-
-import subprocess
 import logging
+import re
+import subprocess
+
+import github
 
 logger = logging.getLogger(__name__)
 
@@ -18,7 +13,8 @@ todo_removal = re.compile("\-.*(@todo|TODO)(.*)")
 
 
 def get_todo_created_issues(github_token, issue_source_repo):
-    """ Get currently open issues created by the todo bot on the given remote. """
+    """Get currently open issues created by the todo bot on the given
+    remote."""
     user_name, mid, repo_name = issue_source_repo.partition("/")
     assert mid
     repo = github.Github(github_token).get_user(user_name).get_repo(repo_name)
@@ -34,7 +30,7 @@ def get_todo_created_issues(github_token, issue_source_repo):
 
 
 def get_todos_added_in_commit(repo_dir, commit):
-    """ Get the todo-detectable lines that were added in the given commit. """
+    """Get the todo-detectable lines that were added in the given commit."""
     try:
         return [
             todo_addition.match(line).group(2).strip()
@@ -48,7 +44,8 @@ def get_todos_added_in_commit(repo_dir, commit):
 
 
 def get_todos_pending_removal(repo_dir):
-    """ Get the todo-detectable lines to be removed when staged changes are committed. """
+    """Get the todo-detectable lines to be removed when staged changes are
+    committed."""
     return [
         todo_removal.match(line).group(2).strip()
         for line in subprocess.check_output(["git", "diff", "--staged"], cwd=repo_dir)
