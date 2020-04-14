@@ -73,7 +73,7 @@ def configure(update_token):
     if not update_token:
         try:
             get_github_token()
-        except LookupError as e:
+        except LookupError:
             update_token = True
     if update_token:
         click.echo(
@@ -91,6 +91,7 @@ def configure(update_token):
         remote = get_issue_source_repo(repo_dir=".")
     except LookupError:
         remote = None
+    # @todo this should instead offer a list of remotes to pick from
     new_remote = prompt_toolkit.prompt(
         f"Set github user/repo to search for issues [{remote}]: "
     )
