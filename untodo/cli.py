@@ -25,8 +25,13 @@ def update_github_token(token):
 
 
 def get_github_token():
-    with config_dir().joinpath("token").open() as infile:
-        return infile.read().strip()
+    try:
+        with config_dir().joinpath("token").open() as infile:
+            return infile.read().strip()
+    except FileNotFoundError:
+        raise LookupError(
+            "Untodo is not configured yet. Run `untodo configure`."
+        )
 
 
 def set_issue_source_repo(repo_dir, remote):
@@ -52,7 +57,7 @@ def get_issue_source_repo(repo_dir):
         remote = None
     if remote is None:
         raise LookupError(
-            "Untodo is not configured for this repository. Run `untodo configure`"
+            "Untodo is not configured for this repository. Run `untodo configure`."
         )
     return remote
 
@@ -65,6 +70,11 @@ def cli():
 @cli.command()
 @click.option("--update-token/--no-update-token", default=False)
 def configure(update_token):
+    if not update_token:
+        try:
+            get_github_token()
+        except LookupError as e:
+            update_token = True
     if update_token:
         click.echo(
             textwrap.dedent(
