@@ -19,13 +19,11 @@ setup(
     python_requires=">=3.6",
     packages=find_packages(exclude=["tests", "*.tests", "*.tests.*", "tests.*"]),
     install_requires=["appdirs", "click", "prompt-toolkit", "pygithub"],
-    extras_require={},
     entry_points={"console_scripts": ["untodo=untodo.cli:cli"]},
     include_package_data=True,
     classifiers=[
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: Implementation :: CPython",
