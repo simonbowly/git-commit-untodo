@@ -2,8 +2,21 @@
 
 Adds a git subcommand `commit-untodo` which automatically detects `todo` issues you are about to close and references them in a commit message template.
 
-Workflow:
-1. Push some changes including `@todo` comments (so the todo bot opens issues)
-2. `git add` some changes that delete `@todo` comments
-3. Run `git commit-untodo`, which adds `closes` references to your commit message template
-4. Bot issues will be closed once your changes are pushed!
+It's not very sophisticated in the way it matches removed lines with issues, currently just runs an exact text match.
+Post an issue if it doesn't pick up something it should - the best way to post would be to reference the commit you made in your (public) git repo and the issues that it didn't (but should have) closed.
+
+## Installation
+
+I haven't put this on PyPi yet, but it's installable from GitHub.
+
+    pip install git+https://github.com/simonbowly/git-commit-untodo.git
+
+Once installed you'll have a `git commit-untodo` subcommand which essentially just runs `git commit` but drafts a message for your to edit.
+
+## Workflow
+
+Using a repository with a Github remote that uses todo (https://todo.jasonet.co/) to open issues automatically.
+
+1. Stage some changes (`git add`) which delete `@todo` comments linked to open issues.
+2. Run `git commit-untodo`, which will add `closes` references to your commit message template and start the commit process.
+3. Edit/finalise the commit message. Relevant bot-generated issues will be closed once your changes are pushed!
