@@ -19,7 +19,7 @@ setup(
     python_requires=">=3.6",
     packages=find_packages(exclude=["tests", "*.tests", "*.tests.*", "tests.*"]),
     install_requires=["appdirs", "click", "prompt-toolkit", "pygithub"],
-    entry_points={"console_scripts": ["untodo=untodo.cli:cli"]},
+    entry_points={"console_scripts": ["git-commit-untodo=untodo.cli:cli"]},
     include_package_data=True,
     classifiers=[
         "Programming Language :: Python",
