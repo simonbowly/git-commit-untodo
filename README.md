@@ -23,5 +23,23 @@ Using a repository with a Github remote that uses todo (https://todo.jasonet.co/
 
 ## Troubleshooting
 
-* Added a debug mode (`git commit-untodo --debug`) that prints all logging and writes the commit message to terminal instead of starting a commit (this should help diagnosing whether it's an issue identifying the todo removal or matching it with a github issue).
-* CLI now puts a comment in the commit message to indicate todo removals it found but failed to match.
+If this worked successfully, you'll get your usual text editor opened to run a commit message:
+
+    Closes #23 TODO - something to do
+
+    # Please enter the commit message for your changes. Lines starting
+    # ...
+
+If a todo removal was found but was not matched to an issue, you'll see this commented out message in the commit file instead, which indicates no issues will actually be closed if you run this commit.
+
+    # Couldn't find a match for this todo line:
+    #     'something to do'
+
+    # Please enter the commit message for your changes. Lines starting
+    # ...
+
+If no todo removals were identified, you'll just get your normal (empty) commit message.
+
+The CLI uses `git commit --template` to work; so if you make no changes or delete all uncommented lines in the commit body, the commit will be aborted as normal.
+You can then use the debug mode (`git commit-untodo --debug`) that prints all logging and writes the commit message to terminal instead of starting a commit.
+This should help diagnosing whether it's an issue identifying the todo removal or matching it with a github issue.
