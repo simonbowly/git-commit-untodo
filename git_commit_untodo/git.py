@@ -7,7 +7,9 @@ import github
 logger = logging.getLogger(__name__)
 
 
-todo_body_commit = re.compile("based on a `todo` comment in ([0-9\w]+)")
+todo_body_commit = re.compile(
+    "based on a `todo` comment in ([0-9\w]+)", flags=re.IGNORECASE
+)
 todo_addition = re.compile("\+.*(@todo|TODO)(.*)")
 todo_removal = re.compile("\-.*(@todo|TODO)(.*)")
 re_github_remotes = re.compile(
@@ -23,7 +25,7 @@ def get_todo_created_issues(github_token, issue_source_repo):
     repo = github.Github(github_token).get_user(user_name).get_repo(repo_name)
     return [
         {
-            "title": issue.title,
+            "title": issue.title.strip(),
             "number": issue.number,
             "commit": todo_body_commit.search(issue.body).group(1),
         }

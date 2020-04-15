@@ -11,7 +11,7 @@ I haven't put this on PyPi yet, but it's installable from GitHub.
 
     pip install git+https://github.com/simonbowly/git-commit-untodo.git
 
-Once installed you'll have a `git commit-untodo` subcommand which essentially just runs `git commit` but drafts a message for your to edit.
+Once installed you'll have a `git commit-untodo` subcommand which essentially just runs `git commit` but drafts a message for you to edit.
 
 ## Workflow
 
@@ -20,3 +20,8 @@ Using a repository with a Github remote that uses todo (https://todo.jasonet.co/
 1. Stage some changes (`git add`) which delete `@todo` comments linked to open issues.
 2. Run `git commit-untodo`, which will add `closes` references to your commit message template and start the commit process.
 3. Edit/finalise the commit message. Relevant bot-generated issues will be closed once your changes are pushed!
+
+## Troubleshooting
+
+* Added a debug mode (`git commit-untodo --debug`) that prints all logging and writes the commit message to terminal instead of starting a commit (this should help diagnosing whether it's an issue identifying the todo removal or matching it with a github issue).
+* CLI now puts a comment in the commit message to indicate todo removals it found but failed to match.
