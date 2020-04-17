@@ -13,7 +13,7 @@ todo_body_commit = re.compile(
 todo_addition = re.compile("\+.*(@todo|TODO)(.*)")
 todo_removal = re.compile("\-.*(@todo|TODO)(.*)")
 re_github_remotes = re.compile(
-    "(\w+).*github.com[:/]([\w\-_0-9]+)/([\w\-_0-9]+).git \(fetch\)"
+    "(\w+).*github.com[:/]([\w\-_0-9]+)/([\w\-_0-9]+).*fetch"
 )
 
 
